@@ -37137,23 +37137,23 @@ if(p<t){s=q
 t=p}}return this.z[a]>=t},
 jp:function(){var u=0,t=P.a2(null),s=this,r,q,p,o,n,m
 var $async$jp=P.Y(function(a,b){if(a===1)return P.a_(b,t)
-while(true)switch(u){case 0:s.r=s.x
-r=s.dy
-q=r.length
-for(p=0,o=0;o<q;++o)p=Math.max(p,r[o].length)
-r=s.b,n=0
-case 2:if(!(n<p)){u=4
-break}for(o=0;o<q;++o){m=s.dy[o]
-if(m.length>n)r.a[m[n]].c.sk(0,"drone"+C.f.h(o))}u=5
+while(true)switch(u){case 0:n=s.dy
+m=n.length
+for(r=0,q=0;q<m;++q)r=Math.max(r,n[q].length)
+n=s.b,p=0
+case 2:if(!(p<r)){u=4
+break}for(q=0;q<m;++q){o=s.dy[q]
+if(o.length>p)n.a[o[p]].c.sk(0,"drone"+C.f.h(q))}u=5
 return P.a7(P.Oy(P.bv(0,1),null),$async$jp)
-case 5:case 3:++n
+case 5:case 3:++p
 u=2
 break
 case 4:return P.a0(null,t)}})
 return P.a1($async$jp,t)},
 ib:function(){var u=0,t=P.a2(null),s=this,r,q
 var $async$ib=P.Y(function(a,b){if(a===1)return P.a_(b,t)
-while(true)switch(u){case 0:s.dy=H.b([],[[P.r,P.j]])
+while(true)switch(u){case 0:s.r=s.x
+s.dy=H.b([],[[P.r,P.j]])
 for(r=[P.j],q=0;s.r.length,q<6;++q)s.dy.push(H.b([],r))
 u=2
 return P.a7(s.iU(),$async$ib)

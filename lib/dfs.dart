@@ -10,6 +10,7 @@ class Dfs{
   int numCells , perRow,numRow;
   List<int>visi;
   List<int> dronePos;
+  List<int> originalDronePos;
   List<int> chargePos;
   List<int> droneChargeRem;
   Set<int> yetToBeVisited;
@@ -19,7 +20,7 @@ class Dfs{
   int TAKETHIS,DONTTAKETHIS;
   List<List<int> > droneNodes;
   int row,col; 
-   Dfs(this.valueController,this.fullCharge,this.dronePos){
+   Dfs(this.valueController,this.fullCharge,this.originalDronePos){
       fullCharge = 20;
       numCells = valueController.numCells;
       perRow = valueController.perRow;
@@ -64,6 +65,7 @@ class Dfs{
   }
   Future  markPath()async{
       int len = 0;
+      dronePos = originalDronePos;
       int numDrones = droneNodes.length;
       for(int i=0;i<numDrones;i++){
         len = max(len , droneNodes[i].length);

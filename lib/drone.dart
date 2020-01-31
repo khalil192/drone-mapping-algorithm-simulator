@@ -90,6 +90,8 @@ void serial(int droneIndex){
     dronesPos[droneIndex] = start;
     dfs1(droneIndex);
 }
+
+
 }
 
 class Pair{

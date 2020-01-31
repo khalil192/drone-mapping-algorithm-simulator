@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'controller.dart';
 import 'package:flutter/rendering.dart';
+import 'dart:collection';
+import 'dart:math';
+import 'dfs.dart';
 //flutter pub global activate peanut
 //flutter pub get
 //git push origin --set-upstream gh-pages
@@ -37,6 +40,10 @@ class _HomeScreenState extends State<HomeScreen> {
       valueController = new ValueController(numCells, perRow);
     });
   }
+  void startMap(){
+      Dfs dfsObj = new Dfs(valueController);  
+      dfsObj.startMap();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,9 +52,9 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           body: Center(child: Grid(valueController)), 
            floatingActionButton: FloatingActionButton(
-             child: Text('start map'),
-            onPressed: ()=>{
-
+             child: Center(child: Text('start map')),
+            onPressed: ()=>{  
+              startMap(),
             },
           )
     );

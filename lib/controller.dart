@@ -73,6 +73,11 @@ class CellController{
           child: Icon(Icons.play_arrow,size : 10.0),
         );
       }
+      if(selectedAs.value == "drone"){
+        return Container(
+          child: Icon(Icons.ac_unit,size : 10.0),
+        );
+      }
       if(selectedAs.value == "end"){
         return Container(
           child:  Icon(Icons.stop,size : 10.0 ),
@@ -81,47 +86,16 @@ class CellController{
       if(selectedAs.value == "currVisted"){
         return Container(color: Colors.black);
       }
-      if(selectedAs.value == "destVisited"){
-        selectedAs.value ="end";
-        return Container( child: Center(child: Icon(Icons.stop)), );
-        // return Container(color: Colors.purple);
+      if(selectedAs.value == "visi"){
+        return Container(color: Colors.grey[200]);
       }
-      if(selectedAs.value == "visited"){
-        return Container(color: Colors.green[200]);
-      }
-      if(selectedAs.value == "semi-visited"){
+      if(selectedAs.value == "drone0"){
         return Container(color: Colors.yellow[200]);
       }
-      if(selectedAs.value == "in-path"){
-      return Container(
-        // color: Colors.black,
-      child: Icon(Icons.send,size: 10.0,),
-        );
-      }
-      if(selectedAs.value == "in-path-down"){
-      return Container(
-        // color: Colors.black,
-      child: Icon(Icons.keyboard_arrow_down,size : 10),
-        );
-      }
-      if(selectedAs.value == "in-path-up"){
-      return Container(
-        // color: Colors.black,
-      child: Icon(Icons.keyboard_arrow_up,size : 10),
-        );
-      }
-      if(selectedAs.value == "in-path-right"){
-      return Container(
-        // color: Colors.black,
-      child: Icon(Icons.keyboard_arrow_right,size : 10),
-        );
-      }
-      if(selectedAs.value == "in-path-left"){
-      return Container(
-        // color: Colors.black,
-      child: Icon(Icons.keyboard_arrow_left,size : 10),
-        );
-      }
+      if(selectedAs.value == "drone1"){
+        return Container(color: Colors.green[200]);
+      }  
+     
   }
   
   

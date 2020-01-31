@@ -92,7 +92,7 @@ class CellController{
       }
       if(selectedAs.value == "charge"){
         return Container(
-          child:  Icon(Icons.battery_charging_full,size : 20.0 ),
+          child:  Icon(Icons.battery_charging_full,size : 15.0 ),
         );      }
       if(selectedAs.value == "drone0"){
         return Container(color: Colors.yellow[200]);

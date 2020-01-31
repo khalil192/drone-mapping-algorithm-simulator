@@ -13,12 +13,13 @@ class Dfs{
   List<int> chargePos;
   List<int> droneChargeRem;
   Set<int> yetToBeVisited;
+  int fullCharge;
   Queue<int> freeDrones;
   int TAKETHIS,DONTTAKETHIS;
   List<List<int> > droneNodes;
   int row,col; 
-   Dfs(this.valueController){
-     print("came here\n");
+   Dfs(this.valueController,this.fullCharge){
+      fullCharge =20;
       numCells = valueController.numCells;
       perRow = valueController.perRow;
       numRow = numCells ~/ perRow;
@@ -37,7 +38,7 @@ class Dfs{
       }
       freeDrones = new Queue<int>();
       for(int i=0;i<dronePos.length;i++){
-        droneChargeRem[i] = 60;
+        droneChargeRem[i] = fullCharge;
         freeDrones.add(i); 
       }
       for(int charge in chargePos){
@@ -71,9 +72,9 @@ class Dfs{
         for(int i=0;i<numDrones;i++){
           if(droneNodes[i].length > j){
           valueController.cellController[droneNodes[i][j]].selectedAs.value = "drone"+i.toString();
-          await wait();
           }
-        }
+        }          
+        await wait();
       }
   }
   void startMap()async{
@@ -90,18 +91,18 @@ class Dfs{
   Future<bool> dfs(int droneIndex,String dronenum,int curr) async{
       int currX = curr ~/ perRow;
       int currY = curr % perRow;
+      bool flag = true;
+      if(droneChargeRem[droneIndex] >0){
       visi[curr] = droneIndex;  //####
       if(valueController.cellController[curr].selectedAs.value == "normal"){
           droneNodes[droneIndex].add(curr);
       valueController.cellController[curr].selectedAs.value = "visi";
         }
       droneChargeRem[droneIndex]--;
-        await wait();
+        // await wait();
         if(yetToBeVisited.isEmpty){ // base case
           return Future.value(true);
       }
-      droneChargeRem[droneIndex]--;
-      bool flag = true;
       for(int i = -1;i<2;i++){
         for(int j =-1;j <2;j++){
           int nextPos = (currX+i)*perRow + currY+j;
@@ -112,13 +113,13 @@ class Dfs{
           && safeState(droneIndex, nextPos)){
             dronePos[droneIndex] = nextPos;
             yetToBeVisited.remove(curr);
+            flag = false;
             if(
             await dfs(droneIndex,dronenum,nextPos)
-             ){
-                  return Future.value(true);
-            }
+             ){    return Future.value(true); }
           }
         }
+      }
       }
       if(flag){
         int nearCharge = -1;
@@ -130,7 +131,7 @@ class Dfs{
               nearCharge = charge;
             }
         }
-        droneChargeRem[droneIndex] = 30;
+        droneChargeRem[droneIndex] = fullCharge;
         dronePos[droneIndex] = nearCharge;
         freeDrones.add(droneIndex);
           valueController.cellController[nearCharge].selectedAs.value = "drone" + droneIndex.toString();
@@ -141,9 +142,30 @@ class Dfs{
       }
         return Future.value(flag); 
   }
+  Future<bool> bfs(int droneIndex,String dronenum,int curr) async{
+      
+      Queue<int> queue  = new Queue<int>();
+      queue.add(curr);
+      while(queue.isNotEmpty){
+        curr = queue.removeFirst(); //curr is position
+
+      }
+      int currX = curr ~/ perRow;
+      int currY = curr % perRow;
+      visi[curr] = droneIndex;  //####
+      if(valueController.cellController[curr].selectedAs.value == "normal"){
+          droneNodes[droneIndex].add(curr);
+      valueController.cellController[curr].selectedAs.value = "visi";
+        }
+        await wait();
+        if(yetToBeVisited.isEmpty){ // base case
+          return Future.value(true);
+      }
+      
+  }
   Future allocateDrones() async{
     int c = 17;
-    
+    int pastNum = yetToBeVisited.length,cnt = 0;
     while(freeDrones.isNotEmpty && yetToBeVisited.isNotEmpty){
       c--;
       int currDrone = freeDrones.removeFirst();
@@ -163,7 +185,15 @@ class Dfs{
       }
         print(nextPos.toString() + " next pos "+ currDrone.toString());
       if(nextPos != -1){
-    await  dfs(currDrone, "drone"+ currDrone.toString() , nextPos);
+      droneChargeRem[currDrone] -= minYet.toInt(); 
+      await  dfs(currDrone, "drone"+ currDrone.toString() , nextPos);
+    }
+    if(pastNum == yetToBeVisited.length){
+      cnt++; 
+    }
+    else{pastNum = yetToBeVisited.length;cnt = 0;}
+    if(cnt > dronePos.length){
+      break;
     }
     }
     await markPath();

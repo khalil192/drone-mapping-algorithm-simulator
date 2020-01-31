@@ -32,23 +32,101 @@ class HomeScreen extends StatefulWidget {
   
 class _HomeScreenState extends State<HomeScreen> {
   static int perRow = 40;
-  static int numCells = 1200;
+  static int numCells = 800;
   ValueController valueController =  ValueController(numCells,perRow);
-   
-  void clearAll(){
+  int fullCharge = 20;
+     void clearAll(){
     setState(() {
       valueController = new ValueController(numCells, perRow);
     });
   }
   void startMap(){
-      Dfs dfsObj = new Dfs(valueController);  
+      Dfs dfsObj = new Dfs(valueController,fullCharge);  
       dfsObj.startMap();
   }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
           appBar: AppBar(
             title: Text('path finder'),
+            actions: <Widget>[
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+               Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                  Container(
+                      child: Text("size of map"),),
+                      SliderTheme(
+                        data:SliderTheme.of(context).copyWith(
+                          activeTrackColor: Colors.black,
+                          inactiveTrackColor:Colors.grey,
+                          thumbColor: Colors.black,
+                          thumbShape: RoundSliderThumbShape(enabledThumbRadius: 8.0),
+                        ),
+                        child: Slider(
+                              min: 20.0,
+                              max: 100,
+                              value: perRow.toDouble(),
+                                  onChanged: (newRating){
+                                    setState(() {
+                                      perRow = newRating.toInt();
+                                      numCells = perRow * 30; 
+                                      valueController = new ValueController(numCells, perRow);
+                                    });
+                                },
+                          ),
+                      ),
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                  Container(
+                      child: Text("capacity of drone"),),
+                      SliderTheme(
+                        data:SliderTheme.of(context).copyWith(
+                          activeTrackColor: Colors.black,
+                          inactiveTrackColor:Colors.grey,
+                          thumbColor: Colors.black,
+                          thumbShape: RoundSliderThumbShape(enabledThumbRadius: 8.0),
+                        ),
+
+                        child: Slider(
+                              min: 20.0,
+                              max: 100,
+                              value: fullCharge.toDouble(),
+                                  onChanged: (newRating){
+                                    setState(() {
+                                      fullCharge = newRating.toInt();
+                                      valueController = new ValueController(numCells, perRow);
+                                    });
+                                },
+                          ),
+                      ),
+                    ],
+                  ),
+                    SizedBox(width: 10,),
+                    SizedBox(width: 10,),
+               
+                  RaisedButton(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: new BorderRadius.circular(10.0),
+                      side : BorderSide(color: Colors.white)
+                    ),
+                    onPressed: ()=>{
+                      clearAll(),
+                    },
+                      child: Text("clear Map"),
+                  ),
+                ]
+              )
+            ],
           ),
           body: Center(child: Grid(valueController)), 
            floatingActionButton: FloatingActionButton(

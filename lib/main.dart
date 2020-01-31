@@ -31,8 +31,8 @@ class HomeScreen extends StatefulWidget {
 }
   
 class _HomeScreenState extends State<HomeScreen> {
-  static int perRow = 30;
-  static int numCells = 900;
+  static int perRow = 40;
+  static int numCells = 1200;
   ValueController valueController =  ValueController(numCells,perRow);
    
   void clearAll(){

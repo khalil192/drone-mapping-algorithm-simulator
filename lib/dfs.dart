@@ -10,7 +10,6 @@ class Dfs{
   int numCells , perRow,numRow;
   List<int>visi;
   List<int> dronePos;
-  List<int> originalDronePos;
   List<int> chargePos;
   List<int> droneChargeRem;
   Set<int> yetToBeVisited;
@@ -20,8 +19,7 @@ class Dfs{
   int TAKETHIS,DONTTAKETHIS;
   List<List<int> > droneNodes;
   int row,col; 
-   Dfs(this.valueController,this.fullCharge,this.originalDronePos){
-      fullCharge = 20;
+   Dfs(this.valueController,this.fullCharge,this.dronePos){
       numCells = valueController.numCells;
       perRow = valueController.perRow;
       numRow = numCells ~/ perRow;
@@ -51,7 +49,7 @@ class Dfs{
     int i2 = cell2 ~/perRow , j2 = cell2 % perRow;
     return sqrt((i1-i2)*(i1-i2) + (j1-j2)*(j1-j2)).toInt();
   }
-  bool safeState(int droneIndex , int lastPos){
+  Future<bool> safeState(int droneIndex , int lastPos){
     double minYet = 1000000; //INF
     int nearCharge;
     for(int charge in chargePos){
@@ -61,7 +59,7 @@ class Dfs{
         nearCharge = charge;
       }
     }
-    return droneChargeRem[droneIndex] >= minYet;
+    return Future.value(droneChargeRem[droneIndex] >= minYet);
   }
   Future  markPath()async{
       int len = 0;
@@ -79,12 +77,11 @@ class Dfs{
       }
   }
   void startMap()async{
-  dronePos = originalDronePos;
   droneNodes = new List<List<int> >();
   for(int i=0;i<dronePos.length;i++){
     droneNodes.add(List<int>());
   }
- await allocateDrones();
+   await allocateDrones();
    await markPath();
 // await clusterMap();
   }
@@ -110,7 +107,7 @@ class Dfs{
             continue;
           }
           if((valueController.cellController[nextPos].selectedAs.value == "normal" || valueController.cellController[nextPos].selectedAs.value == "charge") 
-          && safeState(droneIndex, nextPos)){
+          && await safeState(droneIndex, nextPos)){
             dronePos[droneIndex] = nextPos;
             yetToBeVisited.remove(curr);
             flag = false;
@@ -265,7 +262,7 @@ class Dfs{
 
   Future allocateDrones() async{
     int pastNum = yetToBeVisited.length,cnt = 0;
-    while(freeDrones.isNotEmpty && yetToBeVisited.isNotEmpty){
+    while(freeDrones.isNotEmpty &&  yetToBeVisited.isNotEmpty){
       int currDrone = freeDrones.removeFirst();
       // print(currDrone.toString() + " curr drone");
       int nextPos = -1,minYet = 1000000;//INF
@@ -283,8 +280,10 @@ class Dfs{
         // print(nextPos.toString() + " next pos "+ currDrone.toString());
       if(nextPos != -1){
       droneChargeRem[currDrone] -= minYet.toInt(); 
+      if( await safeState(currDrone, nextPos)){
       await dfs(currDrone, "drone"+ currDrone.toString() , nextPos);
-    }
+      }
+      }
     if(pastNum == yetToBeVisited.length){
       cnt++; 
     }

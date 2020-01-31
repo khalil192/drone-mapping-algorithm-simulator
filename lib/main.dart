@@ -36,13 +36,13 @@ class _HomeScreenState extends State<HomeScreen> {
   static int fullCharge = 10;
   static List<int> dronePos  = [20,20,200,740,200,740];
   static ValueController valueController =  ValueController(numCells,perRow);
-  Dfs dfsObj = new Dfs(valueController,fullCharge,dronePos);  
      void clearAll(){
     setState(() {
       valueController = new ValueController(numCells, perRow);
     });
   }
   void startMap(){
+      Dfs dfsObj = new Dfs(valueController,fullCharge,dronePos);  
       dfsObj.startMap();
   }
   
@@ -50,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
           appBar: AppBar(
-            title: Text('path finder'),
+            title: Text('UAV '),
             actions: <Widget>[
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -60,8 +60,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
-                  Container(
-                      child: Text("size of map"),),
+                  // Container(
+                  //     child: Text("size of map"),),
                       SliderTheme(
                         data:SliderTheme.of(context).copyWith(
                           activeTrackColor: Colors.black,
@@ -88,8 +88,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
-                  Container(
-                      child: Text("capacity of drone"),),
+                  // Container(
+                  //     child: Text("capacity of drone"),),
                       SliderTheme(
                         data:SliderTheme.of(context).copyWith(
                           activeTrackColor: Colors.black,

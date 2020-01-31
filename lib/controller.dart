@@ -87,8 +87,8 @@ class CellController{
         return Container(color: Colors.black);
       }
       if(selectedAs.value == "visi"){
-                return Container();
-        // return Container(color: Colors.grey[200]);
+                // return Container();
+        return Container(color: Colors.grey[200]);
       }
       if(selectedAs.value == "charge"){
         return Container(

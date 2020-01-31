@@ -30,7 +30,7 @@ class ValueController{
          if(cellController[i].selectedAs.value == "end"){
           dest = i;
         }
-    }    
+    }
     var rng = new Random();
     for(int i=0;i<numOfBlocks;i++){
         int num = rng.nextInt(numCells);
@@ -87,7 +87,8 @@ class CellController{
         return Container(color: Colors.black);
       }
       if(selectedAs.value == "visi"){
-        return Container(color: Colors.grey[200]);
+                return Container();
+        // return Container(color: Colors.grey[200]);
       }
       if(selectedAs.value == "drone0"){
         return Container(color: Colors.yellow[200]);
@@ -102,7 +103,9 @@ class CellController{
       }  if(selectedAs.value == "drone4"){
         return Container(color: Colors.purple[200]);
       }  
-     
+     if(selectedAs.value == "drone5"){
+        return Container(color: Colors.black);
+      }  
   }
   
   

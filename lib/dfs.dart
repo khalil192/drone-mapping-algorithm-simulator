@@ -22,12 +22,14 @@ class Dfs{
       numCells = valueController.numCells;
       perRow = valueController.perRow;
       numRow = numCells ~/ perRow;
-      dronePos = new List<int>(3);
-      dronePos  = [20 , 450,700];
+      dronePos = new List<int>(6);
+      dronePos  = [0,29,870,899,820,280];
       chargePos = new List<int>(3);
       chargePos  = [20 , 30,100];
-      droneChargeRem = new List<int>(3);
-      droneChargeRem = [100,100,100];
+      droneChargeRem = new List<int>(dronePos.length);
+      for(int i=0;i<dronePos.length;i++){
+        droneChargeRem[i] = 60;
+      }
       visi = new List<int>(numCells);
       for(int i=0;i<numCells;i++){
         visi[i]= 0;

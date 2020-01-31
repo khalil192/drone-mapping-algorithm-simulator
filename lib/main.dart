@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context){
     return MaterialApp(
-      title: 'path finder',
+      title: 'drone mapping simulator',
       theme: ThemeData(
         primarySwatch: Colors.indigo,
       ),
@@ -95,14 +95,14 @@ final Set<int> selectedIndexes = Set<int>();
   _selectIndex(int index) {
     setState(() {
       selectedIndexes.add(index);
-      lastStartSelected = index;
-      lastEndSelected = index;
+      // lastStartSelected = index;
+      // lastEndSelected = index;
     });
   }
   @override
   Widget build(BuildContext context) {
-    print(selectedIndexes);
-    print(currentSelection);
+    // print(selectedIndexes);
+    // print(currentSelection);
     for(int index in selectedIndexes){
       if(currentSelection == 'block'){
       widget.valueController.selectIndex(index); 
@@ -130,8 +130,8 @@ final Set<int> selectedIndexes = Set<int>();
         prevEndSelected = lastEndSelected;
       }
     }
-    widget.valueController.cellController[prevStartSelected].selectedAs.value = "start";
-    widget.valueController.cellController[prevEndSelected].selectedAs.value = "end";
+    // widget.valueController.cellController[prevStartSelected].selectedAs.value = "start";
+    // widget.valueController.cellController[prevEndSelected].selectedAs.value = "end";
     return Container(
       width: MediaQuery.of(context).size.width * 0.9,
       height: MediaQuery.of(context).size.height *0.8,

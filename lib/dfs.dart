@@ -15,6 +15,7 @@ class Dfs{
   Set<int> yetToBeVisited;
   Queue<int> freeDrones;
   int TAKETHIS,DONTTAKETHIS;
+  List<List<int> > droneNodes;
   int row,col; 
    Dfs(this.valueController){
      print("came here\n");
@@ -22,7 +23,7 @@ class Dfs{
       perRow = valueController.perRow;
       numRow = numCells ~/ perRow;
       dronePos = new List<int>(3);
-      dronePos  = [20 , 450,100];
+      dronePos  = [20 , 450,700];
       chargePos = new List<int>(3);
       chargePos  = [20 , 30,100];
       droneChargeRem = new List<int>(3);
@@ -52,34 +53,40 @@ class Dfs{
     }
     return droneChargeRem[droneIndex] >= minYet;
   }
-  Future  markPath(List<int> drone0nodes ,List<int> drone1nodes )async{
-      int len  = max(drone0nodes.length, drone1nodes.length);
-      for(int i=0;i<len;i++){
-        if(i < drone0nodes.length){
-          valueController.cellController[drone0nodes[i]].selectedAs.value = "drone0";
+  Future  markPath()async{
+      int len = 0;
+      int numDrones = droneNodes.length;
+      for(int i=0;i<numDrones;i++){
+        len = max(len , droneNodes[i].length);
+      }
+      for(int j=0;j<len;j++){
+        for(int i=0;i<numDrones;i++){
+          if(droneNodes[i].length > j){
+          valueController.cellController[droneNodes[i][j]].selectedAs.value = "drone"+i.toString();
+          await wait();
+          }
         }
-        if(i < drone1nodes.length){
-          valueController.cellController[drone1nodes[i]].selectedAs.value = "drone1";
-        }
-        await wait();
       }
   }
   void startMap()async{
-  List<int> drone0nodes = new List<int>();
-  List<int> drone1nodes =  new List<int>();
-  await dfs(0,"drone0",drone0nodes,dronePos[0]);
-  await dfs(1,"drone1",drone1nodes,dronePos[1]);
-  await markPath(drone0nodes, drone1nodes);
+  droneNodes = new List<List<int> >();
+  for(int i=0;i<dronePos.length;i++){
+    droneNodes.add(List<int>());
   }
-  Future<bool> dfs(int droneIndex,String dronenum,List<int> droneNodes,int curr) async{
+  for(int i=0;i<dronePos.length;i++){
+    await dfs(i,"drone"+ i.toString() , dronePos[i]);
+  }
+  await markPath();
+  }
+  Future<bool> dfs(int droneIndex,String dronenum,int curr) async{
       int currX = curr ~/ perRow;
       int currY = curr % perRow;
-      // print(curr.toString() + " is curr\n");
+      print(curr.toString() + " is curr\n");
       visi[curr] = droneIndex;  //####
-      droneNodes.add(curr);
+      droneNodes[droneIndex].add(curr);
       print('curr is ' + curr.toString() + " "+ dronenum);
       valueController.cellController[curr].selectedAs.value = "visi";
-        await wait();
+        // await wait();
       //   if(yetToBeVisited.isEmpty){ // base case
       //     // return ;
       // }
@@ -97,7 +104,7 @@ class Dfs{
             dronePos[droneIndex] = nextPos;
             // yetToBeVisited.remove(curr);
             // if(await
-            await dfs(droneIndex,dronenum,droneNodes,nextPos);
+            await dfs(droneIndex,dronenum,nextPos);
             //  ){
                   // return Future.value(true);
             // }

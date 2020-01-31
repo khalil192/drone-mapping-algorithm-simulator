@@ -46,7 +46,7 @@ class ValueController{
           String curr = cellController[i].selectedAs.value;
           if((curr != "start" && curr != "end" && curr != "block")){
             cellController[i].selectedAs.value = "normal";
-          }  
+          }
         }
     }
 }
@@ -94,6 +94,13 @@ class CellController{
       }
       if(selectedAs.value == "drone1"){
         return Container(color: Colors.green[200]);
+      }  
+      if(selectedAs.value == "drone2"){
+        return Container(color: Colors.red[200]);
+      }  if(selectedAs.value == "drone3"){
+        return Container(color: Colors.orange[200]);
+      }  if(selectedAs.value == "drone4"){
+        return Container(color: Colors.purple[200]);
       }  
      
   }

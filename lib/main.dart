@@ -34,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
   static int perRow = 40;
   static int numCells = 800;
   ValueController valueController =  ValueController(numCells,perRow);
-  int fullCharge = 20;
+  int fullCharge = 10;
      void clearAll(){
     setState(() {
       valueController = new ValueController(numCells, perRow);
@@ -98,8 +98,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
 
                         child: Slider(
-                              min: 20.0,
-                              max: 100,
+                              min: 10.0,
+                              max: 200,
                               value: fullCharge.toDouble(),
                                   onChanged: (newRating){
                                     setState(() {

@@ -19,13 +19,12 @@ class Dfs{
   int TAKETHIS,DONTTAKETHIS;
   List<List<int> > droneNodes;
   int row,col; 
-   Dfs(this.valueController,this.fullCharge){
+   Dfs(this.valueController,this.fullCharge,this.dronePos){
       fullCharge = 20;
       numCells = valueController.numCells;
       perRow = valueController.perRow;
       numRow = numCells ~/ perRow;
-      dronePos = new List<int>(6);
-      dronePos  = [20,20,200,740,200,740];
+      
       chargePos = new List<int>(3);
       chargePos  = [20 , 200,740];
       droneChargeRem = new List<int>(dronePos.length);
@@ -83,12 +82,10 @@ class Dfs{
   for(int i=0;i<dronePos.length;i++){
     droneNodes.add(List<int>());
   }
-//  await allocateDrones();
-await clusterMap();
-  // for(int i=0;i<dronePos.length;i++){
-  //   await dfs(i,"drone"+ i.toString() , dronePos[i]);
-  // }
-  // await markPath();
+ await allocateDrones();
+   await markPath();
+
+// await clusterMap();
   }
   Future<bool> dfs(int droneIndex,String dronenum,int curr) async{
       int currX = curr ~/ perRow;
@@ -101,7 +98,7 @@ await clusterMap();
       valueController.cellController[curr].selectedAs.value = "visi";
         }
       droneChargeRem[droneIndex]--;
-        // await wait();
+        await wait();
         if(yetToBeVisited.isEmpty){ // base case
           return Future.value(true);
       }
@@ -274,7 +271,6 @@ await clusterMap();
       for(int pos in yetToBeVisited){
         // print('came alright');
         if(valueController.cellController[pos].selectedAs.value == "normal"){
-          
         int currDist = dist(dronePos[currDrone],pos).toInt();     
         print(currDist.toString() + ' cur÷rDist');
         if(currDist < minYet){
@@ -286,13 +282,13 @@ await clusterMap();
         print(nextPos.toString() + " next pos "+ currDrone.toString());
       if(nextPos != -1){
       droneChargeRem[currDrone] -= minYet.toInt(); 
-      await  dfs(currDrone, "drone"+ currDrone.toString() , nextPos);
+      await dfs(currDrone, "drone"+ currDrone.toString() , nextPos);
     }
     if(pastNum == yetToBeVisited.length){
       cnt++; 
     }
     else{pastNum = yetToBeVisited.length;cnt = 0;}
-    if(cnt > dronePos.length){
+    if(cnt > dronePos.length+5){
       break;
     }
     }

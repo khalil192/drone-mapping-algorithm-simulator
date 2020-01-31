@@ -33,15 +33,17 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   static int perRow = 40;
   static int numCells = 800;
-  ValueController valueController =  ValueController(numCells,perRow);
-  int fullCharge = 10;
+  static int fullCharge = 10;
+  static List<int> dronePos  = [20,20,200,740,200,740];
+  static ValueController valueController =  ValueController(numCells,perRow);
+  Dfs dfsObj = new Dfs(valueController,fullCharge,dronePos);  
      void clearAll(){
     setState(() {
       valueController = new ValueController(numCells, perRow);
     });
   }
   void startMap(){
-      Dfs dfsObj = new Dfs(valueController,fullCharge);  
+   
       dfsObj.startMap();
   }
   

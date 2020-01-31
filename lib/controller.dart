@@ -87,9 +87,13 @@ class CellController{
         return Container(color: Colors.black);
       }
       if(selectedAs.value == "visi"){
-                return Container();
-        // return Container(color: Colors.grey[200]);
+                // return Container();
+        return Container(color: Colors.grey[200]);
       }
+      if(selectedAs.value == "charge"){
+        return Container(
+          child:  Icon(Icons.battery_charging_full,size : 20.0 ),
+        );      }
       if(selectedAs.value == "drone0"){
         return Container(color: Colors.yellow[200]);
       }
@@ -104,7 +108,7 @@ class CellController{
         return Container(color: Colors.purple[200]);
       }  
      if(selectedAs.value == "drone5"){
-        return Container(color: Colors.black);
+        return Container(color: Colors.cyan);
       }  
   }
   

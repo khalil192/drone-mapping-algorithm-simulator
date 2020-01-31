@@ -27,15 +27,21 @@ class Dfs{
       chargePos = new List<int>(3);
       chargePos  = [20 , 30,100];
       droneChargeRem = new List<int>(dronePos.length);
-      for(int i=0;i<dronePos.length;i++){
-        droneChargeRem[i] = 60;
-      }
       visi = new List<int>(numCells);
+      yetToBeVisited = new Set<int>();
       for(int i=0;i<numCells;i++){
         visi[i]= 0;
         if(valueController.cellController[i].selectedAs.value == "normal"){
-          // yetToBeVisited.add(i);
+          yetToBeVisited.add(i);
         }
+      }
+      freeDrones = new Queue<int>();
+      for(int i=0;i<dronePos.length;i++){
+        droneChargeRem[i] = 60;
+        freeDrones.add(i); 
+      }
+      for(int charge in chargePos){
+          valueController.cellController[charge].selectedAs.value = "charge";
       }
   }
   double dist(int cell1 , int cell2){
@@ -75,25 +81,27 @@ class Dfs{
   for(int i=0;i<dronePos.length;i++){
     droneNodes.add(List<int>());
   }
-  for(int i=0;i<dronePos.length;i++){
-    await dfs(i,"drone"+ i.toString() , dronePos[i]);
-  }
-  await markPath();
+ await allocateDrones();
+  // for(int i=0;i<dronePos.length;i++){
+  //   await dfs(i,"drone"+ i.toString() , dronePos[i]);
+  // }
+  // await markPath();
   }
   Future<bool> dfs(int droneIndex,String dronenum,int curr) async{
       int currX = curr ~/ perRow;
       int currY = curr % perRow;
-      print(curr.toString() + " is curr\n");
       visi[curr] = droneIndex;  //####
-      droneNodes[droneIndex].add(curr);
-      print('curr is ' + curr.toString() + " "+ dronenum);
+      if(valueController.cellController[curr].selectedAs.value == "normal"){
+          droneNodes[droneIndex].add(curr);
       valueController.cellController[curr].selectedAs.value = "visi";
-        // await wait();
-      //   if(yetToBeVisited.isEmpty){ // base case
-      //     // return ;
-      // }
+
+        }
       droneChargeRem[droneIndex]--;
-  
+        await wait();
+        if(yetToBeVisited.isEmpty){ // base case
+          return Future.value(true);
+      }
+      droneChargeRem[droneIndex]--;
       bool flag = true;
       for(int i = -1;i<2;i++){
         for(int j =-1;j <2;j++){
@@ -104,12 +112,12 @@ class Dfs{
           if(valueController.cellController[nextPos].selectedAs.value == "normal"
           && safeState(droneIndex, nextPos)){
             dronePos[droneIndex] = nextPos;
-            // yetToBeVisited.remove(curr);
-            // if(await
-            await dfs(droneIndex,dronenum,nextPos);
-            //  ){
-                  // return Future.value(true);
-            // }
+            yetToBeVisited.remove(curr);
+            if(
+            await dfs(droneIndex,dronenum,nextPos)
+             ){
+                  return Future.value(true);
+            }
           }
         }
       }
@@ -123,10 +131,42 @@ class Dfs{
               nearCharge = charge;
             }
         }
+        droneChargeRem[droneIndex] = 30;
         dronePos[droneIndex] = nearCharge;
+        freeDrones.add(droneIndex);
+        for(int i=0;i<10;i++){
+          valueController.cellController[nearCharge].selectedAs.value = "drone" + droneIndex.toString();
+          await wait();
+          await wait();
+          valueController.cellController[nearCharge].selectedAs.value = "charge";
+        }
         //free drones positons
         return Future.value(true); 
       }
         return Future.value(flag); 
   }
+  Future allocateDrones() async{
+    int c = 17;
+    while(c > 0 && freeDrones.isNotEmpty){
+      c--;
+      int currDrone = freeDrones.removeFirst();
+      print(currDrone.toString() + " curr drone");
+      int nextPos = -1,minYet = 1000000;//INF
+      for(int pos in yetToBeVisited){
+        // print('came alright');
+        int currDist = dist(dronePos[currDrone],pos).toInt();     
+        // print(currDist.toString() + ' cur÷rDist');
+        if(currDist < minYet){
+          minYet = currDist;
+          nextPos = pos;
+        }  
+      }
+        // print(nextPos.toString() + " next pos "+ currDrone.toString());
+      if(nextPos != -1){
+    await  dfs(currDrone, "drone"+ currDrone.toString() , nextPos);
+    }
+    }
+    await markPath();
+  }
+
 }

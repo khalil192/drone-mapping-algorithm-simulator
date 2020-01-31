@@ -65,7 +65,6 @@ class Dfs{
   }
   Future  markPath()async{
       int len = 0;
-      dronePos = originalDronePos;
       int numDrones = droneNodes.length;
       for(int i=0;i<numDrones;i++){
         len = max(len , droneNodes[i].length);
@@ -80,6 +79,7 @@ class Dfs{
       }
   }
   void startMap()async{
+  dronePos = originalDronePos;
   droneNodes = new List<List<int> >();
   for(int i=0;i<dronePos.length;i++){
     droneNodes.add(List<int>());

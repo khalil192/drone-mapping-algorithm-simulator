@@ -10,11 +10,31 @@ import 'dfs.dart';
 void main() => runApp(MyApp());
 
 String searchMethod = "Depth First Search";
-
+List<Color> colorsList; 
 String currentSelection = "block";
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context){
+    colorsList = new List<Color>();
+    var _random  = new Random(); 
+    for(int i=0;i<30;i++){
+      int a = _random.nextInt(100)+150,b =_random.nextInt(100)+150 ,c=_random.nextInt(100)+150,d=_random.nextInt(10)+150;
+    Color currColor = Color.fromARGB(
+        //or with fromRGBO with fourth arg as _random.nextDouble(),
+        a,b,c,d
+      );    
+      int cc =1;
+    for(Color color in colorsList){
+      if(currColor == color){
+        cc=0;break;
+      }
+    }
+    if(cc==1 ||  currColor == Color(0xFFFFFFFF)){
+      colorsList.add(currColor);
+    }else{
+      i--;
+    }
+    }
     return MaterialApp(
       title: 'drone mapping simulator',
       theme: ThemeData(
@@ -36,10 +56,10 @@ class _HomeScreenState extends State<HomeScreen> {
   static int numCells = 800;
   static int fullCharge = 10;
   // static List<int> dronePos  = [20,20,200,740,200,740];
-  static ValueController valueController =  ValueController(numCells,perRow);
+  static ValueController valueController =  ValueController(numCells,perRow,colorsList);
      void clearAll(){
     setState(() {
-      valueController = new ValueController(numCells, perRow);
+      valueController = new ValueController(numCells, perRow,colorsList);
     });
   }
   void startMap(){
@@ -94,7 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     setState(() {
                                       perRow = newRating.toInt();
                                       numCells = perRow * 30; 
-                                      valueController = new ValueController(numCells, perRow);
+                                      valueController = new ValueController(numCells, perRow,colorsList);
                                     });
                                 },
                           ),
@@ -122,7 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   onChanged: (newRating){
                                     setState(() {
                                       fullCharge = newRating.toInt();
-                                      valueController = new ValueController(numCells, perRow);
+                                      valueController = new ValueController(numCells, perRow,colorsList);
                                     });
                                 },
                           ),

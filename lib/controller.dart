@@ -9,12 +9,13 @@ class ValueController{
   int numCells;
   int perRow;
   int numCharges,numDrones;
-  ValueController(this.numCells,this.perRow){
+  List<Color> colorsList;
+  ValueController(this.numCells,this.perRow,this.colorsList){
     numCharges = 3;
     numDrones = 6;
     cellController = new List<CellController>(numCells);
     for(int i=0;i<numCells;i++){
-      cellController[i] = new CellController(i,perRow);
+      cellController[i] = new CellController(i,perRow,colorsList);
     }
     var rng = new Random();
     for(int i=0;i<numCharges;i++){
@@ -76,7 +77,8 @@ class CellController{
   ValueNotifier<Color> color;
   ValueNotifier<String> selectedAs;
   int index,perRow;
-  CellController(this.index,this.perRow){
+  List<Color> colorsList;
+  CellController(this.index,this.perRow,this.colorsList){
     length = new ValueNotifier(2.0);
     color = new ValueNotifier(Colors.white);
     selectedAs = new ValueNotifier("normal");
@@ -93,7 +95,7 @@ class CellController{
           child: Icon(Icons.play_arrow,size : 10.0),
         );
       }
-      if(selectedAs.value == "drone" ||selectedAs.value == "drone-start" ){
+      if(selectedAs.value == "drone"  || selectedAs.value == "drone-start"){
         return Container(
           child: Icon(Icons.ac_unit,size : 10.0),
         );
@@ -114,7 +116,12 @@ class CellController{
         return Container(
           child:  Icon(Icons.battery_charging_full,size : 15.0 ),
         );      }
-      if(selectedAs.value == "drone0"){
+        for(int i= 0;i<colorsList.length;i++){
+       if(selectedAs.value == "drone"+i.toString() ){
+        return Container(color: colorsList[i]);
+         }   
+        }
+     /* if(selectedAs.value == "drone0"){
         return Container(color: Colors.yellow[200]);
       }
       if(selectedAs.value == "drone1"){
@@ -130,6 +137,15 @@ class CellController{
      if(selectedAs.value == "drone5"){
         return Container(color: Colors.cyan);
       }  
+      if(selectedAs.value == "drone5"){
+        return Container(color: Colors.cyan);
+      }  if(selectedAs.value == "drone5"){
+        return Container(color: Colors.cyan);
+      }  if(selectedAs.value == "drone5"){
+        return Container(color: Colors.cyan);
+      }  if(selectedAs.value == "drone5"){
+        return Container(color: Colors.cyan);
+      }  */
   }
   
   

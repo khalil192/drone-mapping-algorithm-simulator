@@ -19,13 +19,23 @@ class Dfs{
   int TAKETHIS,DONTTAKETHIS;
   List<List<int> > droneNodes;
   int row,col; 
-   Dfs(this.valueController,this.fullCharge,this.dronePos){
+   Dfs(this.valueController,this.fullCharge){
       numCells = valueController.numCells;
       perRow = valueController.perRow;
       numRow = numCells ~/ perRow;
       
-      chargePos = new List<int>(3);
-      chargePos  = [20 , 200,740];
+      // chargePos = new List<int>(3);
+      // chargePos  = [20 , 200,740];
+      chargePos = new List<int>();
+      dronePos = new List<int>();
+      for(int i=0;i<numCells;i++){
+          if(valueController.cellController[i].selectedAs.value == "charge"){
+            chargePos.add(i);
+          }
+          if(valueController.cellController[i].selectedAs.value == "drone"){
+            dronePos.add(i);
+          }
+      }
       droneChargeRem = new List<int>(dronePos.length);
       visi = new List<int>(numCells);
       yetToBeVisited = new Set<int>();

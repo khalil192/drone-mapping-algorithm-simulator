@@ -8,10 +8,30 @@ class ValueController{
   List<CellController> cellController;
   int numCells;
   int perRow;
+  int numCharges,numDrones;
   ValueController(this.numCells,this.perRow){
+    numCharges = 3;
+    numDrones = 6;
     cellController = new List<CellController>(numCells);
     for(int i=0;i<numCells;i++){
       cellController[i] = new CellController(i,perRow);
+    }
+    var rng = new Random();
+    for(int i=0;i<numCharges;i++){
+        int randomCharge = rng.nextInt(numCells-1);
+        if(cellController[randomCharge].selectedAs.value == "normal"){
+        cellController[randomCharge].selectedAs.value = "charge";
+        }else{
+          i--;
+        }
+    }
+    for(int i=0;i<numDrones;i++){
+      int randomCharge = rng.nextInt(numCells-1);
+        if(cellController[randomCharge].selectedAs.value == "normal"){
+        cellController[randomCharge].selectedAs.value = "drone";
+        }else{
+          i--;
+        }
     }
   }
   void selectIndex(int index){

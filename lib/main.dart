@@ -35,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
   static int perRow = 40;
   static int numCells = 800;
   static int fullCharge = 10;
-  static List<int> dronePos  = [20,20,200,740,200,740];
+  // static List<int> dronePos  = [20,20,200,740,200,740];
   static ValueController valueController =  ValueController(numCells,perRow);
      void clearAll(){
     setState(() {
@@ -43,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
   void startMap(){
-      Dfs dfsObj = new Dfs(valueController,fullCharge,dronePos);  
+      Dfs dfsObj = new Dfs(valueController,fullCharge);  
       dfsObj.startMap(currentMethod);
   }
   
@@ -310,16 +310,24 @@ Color getColor(String selectedAs){
 int startSelection = -1;
 class _CellState extends State<Cell> {
   void cellClicked() async{
-  currentSelection =  widget.cellController.selectedAs.value;
+    String ans = widget.cellController.selectedAs.value;
+    if(widget.cellController.selectedAs.value == "normal"){
+  widget.cellController.selectedAs.value = currentSelection;
+    }else{
+        widget.cellController.selectedAs.value = "normal";
+    }
+      currentSelection =  ans;
   switch(currentSelection){
     case "normal":{
       currentSelection = "block";
-      widget.cellController.selectedAs.value = currentSelection;
     }
     break;
     case "block":{
       currentSelection = "normal";
-      widget.cellController.selectedAs.value = currentSelection;
+    }
+    break;
+    case "charge":{
+      currentSelection = "charge";
     }
     break;
   }  

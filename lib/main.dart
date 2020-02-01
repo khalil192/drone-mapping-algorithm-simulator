@@ -73,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void startMap() async{
       Dfs dfsObj = new Dfs(valueController,fullCharge);  
     await dfsObj.startMap(currentMethod);
-    toastMessage();
+    // toastMessage();
   }
   void addObject(String object){
     var rng = new Random();
@@ -91,11 +91,11 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     }
   }
-  void toastMessage(){
-    Scaffold.of(context).showSnackBar(SnackBar(
-      content: Text("Sending Message"),
-    ));
-  }
+  // void toastMessage(){
+  //   Scaffold.of(context).showSnackBar(SnackBar(
+  //     content: Text("Sending Message"),
+  //   ));
+  // }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

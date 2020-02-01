@@ -76,14 +76,17 @@ class Dfs{
         await wait();
       }
   }
-  void startMap()async{
+  void startMap(String method)async{
   droneNodes = new List<List<int> >();
   for(int i=0;i<dronePos.length;i++){
     droneNodes.add(List<int>());
   }
-   await allocateDrones();
+  if(method == "clustering"){
+  await clusterMap();
+  }else{
+  await allocateDrones();
    await markPath();
-// await clusterMap();
+  }
   }
   Future<bool> dfs(int droneIndex,String dronenum,int curr) async{
       int currX = curr ~/ perRow;

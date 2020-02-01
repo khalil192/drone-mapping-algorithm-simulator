@@ -24,6 +24,7 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+String currentMethod = "clustering";
 // ValueController valueController;
 class HomeScreen extends StatefulWidget {
   @override
@@ -43,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
   void startMap(){
       Dfs dfsObj = new Dfs(valueController,fullCharge,dronePos);  
-      dfsObj.startMap();
+      dfsObj.startMap(currentMethod);
   }
   
   @override
@@ -100,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                         child: Slider(
                               min: 10.0,
-                              max: 200,
+                              max: 150,
                               value: fullCharge.toDouble(),
                                   onChanged: (newRating){
                                     setState(() {
@@ -114,7 +115,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                     SizedBox(width: 10,),
                     SizedBox(width: 10,),
-               
                   RaisedButton(
                     shape: RoundedRectangleBorder(
                       borderRadius: new BorderRadius.circular(10.0),
@@ -125,8 +125,34 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                       child: Text("clear Map"),
                   ),
+                  SizedBox(width: 10,),
+                 DropdownButton<String>(  
+                    value: currentMethod,
+                    icon: Icon(Icons.keyboard_arrow_down),
+                    iconSize: 24,
+                    iconEnabledColor: Colors.black,
+                    elevation: 16,
+                  style: TextStyle(color: Colors.black, fontSize: 20),
+                  isDense: true,
+                      onChanged: (String newValue) {
+                                setState(() {
+                                  currentMethod = newValue;
+                                });
+                          },
+                          items: <String>['clustering' , 'non clustering']
+                          .map<DropdownMenuItem<String>>((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                          }
+                  ).toList(),
+                  ),
+                  SizedBox(width: 50,),
                 ]
+              
               )
+
             ],
           ),
           body: Center(child: Grid(valueController)), 

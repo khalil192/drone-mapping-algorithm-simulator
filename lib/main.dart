@@ -70,9 +70,10 @@ class _HomeScreenState extends State<HomeScreen> {
            valueController.cellController[i].selectedAs.value = "normal";
        }
   }
-  void startMap(){
+  void startMap() async{
       Dfs dfsObj = new Dfs(valueController,fullCharge);  
-      dfsObj.startMap(currentMethod);
+    await dfsObj.startMap(currentMethod);
+    toastMessage();
   }
   void addObject(String object){
     var rng = new Random();
@@ -89,6 +90,11 @@ class _HomeScreenState extends State<HomeScreen> {
         break;
       }
     }
+  }
+  void toastMessage(){
+    Scaffold.of(context).showSnackBar(SnackBar(
+      content: Text("Sending Message"),
+    ));
   }
   @override
   Widget build(BuildContext context) {

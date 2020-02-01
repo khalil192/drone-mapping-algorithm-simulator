@@ -107,7 +107,7 @@ class Dfs{
       print('complete Dist  = ' + completeDist.toString());
       print('maxTime travelled = ' + maxDist.toString());
   }
-  void startMap(String method)async{
+  Future startMap(String method)async{
   droneNodes = new List<List<int> >();
   for(int i=0;i<dronePos.length;i++){
     droneNodes.add(List<int>());

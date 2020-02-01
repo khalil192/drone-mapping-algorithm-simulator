@@ -93,7 +93,7 @@ class CellController{
           child: Icon(Icons.play_arrow,size : 10.0),
         );
       }
-      if(selectedAs.value == "drone"){
+      if(selectedAs.value == "drone" ||selectedAs.value == "drone-start" ){
         return Container(
           child: Icon(Icons.ac_unit,size : 10.0),
         );
@@ -107,8 +107,8 @@ class CellController{
         return Container(color: Colors.black);
       }
       if(selectedAs.value == "visi"){
-                // return Container();
-        return Container(color: Colors.grey[200]);
+                return Container();
+        // return Container(color: Colors.grey[200]);
       }
       if(selectedAs.value == "charge"){
         return Container(

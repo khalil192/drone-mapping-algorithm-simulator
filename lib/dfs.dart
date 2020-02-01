@@ -23,7 +23,6 @@ class Dfs{
       numCells = valueController.numCells;
       perRow = valueController.perRow;
       numRow = numCells ~/ perRow;
-      
       // chargePos = new List<int>(3);
       // chargePos  = [20 , 200,740];
       chargePos = new List<int>();
@@ -41,6 +40,9 @@ class Dfs{
       yetToBeVisited = new Set<int>();
       for(int i=0;i<numCells;i++){
         visi[i]= 0;
+        if(valueController.cellController[i].selectedAs.value == "drone"){
+          valueController.cellController[i].selectedAs.value = "drone-start";
+        }
         if(valueController.cellController[i].selectedAs.value == "normal"){
           yetToBeVisited.add(i);
         }
@@ -109,7 +111,7 @@ class Dfs{
       valueController.cellController[curr].selectedAs.value = "visi";
         }
       droneChargeRem[droneIndex]--;
-        await wait();
+        // await wait();
         if(yetToBeVisited.isEmpty){ // base case
           return Future.value(true);
       }

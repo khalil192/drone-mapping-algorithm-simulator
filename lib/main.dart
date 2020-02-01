@@ -46,7 +46,22 @@ class _HomeScreenState extends State<HomeScreen> {
       Dfs dfsObj = new Dfs(valueController,fullCharge);  
       dfsObj.startMap(currentMethod);
   }
-  
+  void addObject(String object){
+    var rng = new Random();
+    int newDrone = rng.nextInt(numCells-1);
+    while(valueController.cellController[newDrone].selectedAs.value == "drone" || valueController.cellController[newDrone].selectedAs.value == "charge"){
+      newDrone = rng.nextInt(numCells-1);
+    }
+    valueController.cellController[newDrone].selectedAs.value = object;
+  }
+  void removeObject(String object){
+    for(int i=0;i<numCells;i++){
+      if(valueController.cellController[i].selectedAs.value == object){
+        valueController.cellController[i].selectedAs.value = "normal";
+        break;
+      }
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,6 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
+
                 children: <Widget>[
                Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -123,7 +139,51 @@ class _HomeScreenState extends State<HomeScreen> {
                     onPressed: ()=>{
                       clearAll(),
                     },
-                      child: Text("clear Map"),
+                      child: Text("clear all"),
+                  ),
+                  SizedBox(width: 10,),
+                  RaisedButton(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: new BorderRadius.circular(10.0),
+                      side : BorderSide(color: Colors.white)
+                    ),
+                    onPressed: ()=>{
+                      addObject("drone"),
+                    },
+                      child: Text("drone +"),
+                  ),
+                  SizedBox(width: 10,),
+          RaisedButton(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: new BorderRadius.circular(10.0),
+                      side : BorderSide(color: Colors.white)
+                    ),
+                    onPressed: ()=>{
+                      addObject("charge"),
+                    },
+                      child: Text("charge +"),
+                  ),
+                  SizedBox(width: 10,),
+                  RaisedButton(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: new BorderRadius.circular(10.0),
+                      side : BorderSide(color: Colors.white)
+                    ),
+                    onPressed: ()=>{
+                      removeObject("charge"),
+                    },
+                      child: Text("charge -"),
+                  ),
+                  SizedBox(width: 10,),
+                   RaisedButton(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: new BorderRadius.circular(10.0),
+                      side : BorderSide(color: Colors.white)
+                    ),
+                    onPressed: ()=>{
+                      removeObject("drone"),
+                    },
+                      child: Text("drone -"),
                   ),
                   SizedBox(width: 10,),
                  DropdownButton<String>(  
@@ -328,6 +388,10 @@ class _CellState extends State<Cell> {
     break;
     case "charge":{
       currentSelection = "charge";
+    }
+    break;
+    case "drone":{
+      currentSelection = "drone";
     }
     break;
   }  

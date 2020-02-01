@@ -147,9 +147,6 @@ class CellController{
         return Container(color: Colors.cyan);
       }  */
   }
-  
-  
-
 }
 
 

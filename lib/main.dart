@@ -8,7 +8,6 @@ import 'dfs.dart';
 //flutter pub get
 //git push origin --set-upstream gh-pages
 void main() => runApp(MyApp());
-
 String searchMethod = "Depth First Search";
 List<Color> colorsList; 
 String currentSelection = "block";
@@ -54,7 +53,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   static int perRow = 40;
   static int numCells = 800;
-  static int fullCharge = 10;
+  static int fullCharge = 30;
   // static List<int> dronePos  = [20,20,200,740,200,740];
   static ValueController valueController =  ValueController(numCells,perRow,colorsList);
      void clearAll(){
@@ -70,10 +69,11 @@ class _HomeScreenState extends State<HomeScreen> {
            valueController.cellController[i].selectedAs.value = "normal";
        }
   }
+  ValueNotifier<int> maxTime = new ValueNotifier(0);
+  ValueNotifier<int> totTime = ValueNotifier<int>(0);
   void startMap() async{
-      Dfs dfsObj = new Dfs(valueController,fullCharge);  
+      Dfs dfsObj = new Dfs(valueController,fullCharge,this.maxTime,this.totTime);  
     await dfsObj.startMap(currentMethod);
-    // toastMessage();
   }
   void addObject(String object){
     var rng = new Random();
@@ -96,16 +96,16 @@ class _HomeScreenState extends State<HomeScreen> {
   //     content: Text("Sending Message"),
   //   ));
   // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
           appBar: AppBar(
-            title: Text('UAV '),
+            title: Text('drone mapping simulator '),
             actions: <Widget>[
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
-
                 children: <Widget>[
                Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -148,7 +148,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           thumbColor: Colors.black,
                           thumbShape: RoundSliderThumbShape(enabledThumbRadius: 8.0),
                         ),
-
                         child: Slider(
                               min: 10.0,
                               max: 150,
@@ -243,12 +242,34 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   SizedBox(width: 50,),
                 ]
-              
               )
-
             ],
           ),
-          body: Center(child: Grid(valueController)), 
+          body: Column(
+            children: <Widget>[
+              SizedBox(height: 20,),
+              Row(
+              children: <Widget>[
+                Text("max time taken : "),
+                ValueListenableBuilder(
+                  valueListenable: maxTime,
+                  builder:(context,maxTime,child){
+                    return Text(maxTime.toString());
+                  },
+                ),
+                SizedBox(width : 80.0),
+                Text("complete fuel consumed : "),
+                ValueListenableBuilder(
+                  valueListenable: totTime,
+                  builder:(context,totTime,child){
+                    return Text(totTime.toString());
+                  },
+                )
+              ],
+              ),
+              Center(child: Grid(valueController)),
+            ],
+          ), 
            floatingActionButton: FloatingActionButton(
              child: Center(child: Text('start map')),
             onPressed: ()=>{  
@@ -258,7 +279,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-
 class Grid extends StatefulWidget {
   final ValueController valueController;
   Grid(this.valueController);

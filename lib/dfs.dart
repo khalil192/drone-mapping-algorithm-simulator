@@ -1,6 +1,8 @@
 import 'dart:collection';
 import 'dart:math';
 
+import 'package:flutter/material.dart';
+
 import 'controller.dart';
 
 
@@ -20,8 +22,10 @@ class Dfs{
   List<int> droneOriginalPos;
   int TAKETHIS,DONTTAKETHIS;
   List<List<int> > droneNodes;
+  ValueNotifier<int> maxTime;
+  ValueNotifier<int> totTime;
   int row,col; 
-   Dfs(this.valueController,this.fullCharge){
+   Dfs(this.valueController,this.fullCharge,this.maxTime,this.totTime){
       numCells = valueController.numCells;
       perRow = valueController.perRow;
       numRow = numCells ~/ perRow;
@@ -104,6 +108,8 @@ class Dfs{
         maxDist = max(maxDist , droneDist[i]);
         print('drone '+ i.toString() + " : " + droneDist[i].toString());
       }
+      maxTime.value = maxDist.toInt();
+      totTime.value = completeDist.toInt();
       print('complete Dist  = ' + completeDist.toString());
       print('maxTime travelled = ' + maxDist.toString());
   }
@@ -111,6 +117,7 @@ class Dfs{
   droneNodes = new List<List<int> >();
   for(int i=0;i<dronePos.length;i++){
     droneNodes.add(List<int>());
+    droneDist[i] = 0;
   }
   if(method == "clustering"){
   await clusterMap();
@@ -150,7 +157,7 @@ class Dfs{
             dronePos[droneIndex] = nextPos;
             yetToBeVisited.remove(curr);
             flag = false;
-            droneDist[droneIndex] += dist(dronePos[droneIndex], nextPos);
+            droneDist[droneIndex] += dist(curr, nextPos);
             if(
             await dfs(droneIndex,dronenum,nextPos)
              ){    return Future.value(true); }
@@ -168,6 +175,7 @@ class Dfs{
               nearCharge = charge;
             }
         }
+        droneDist[droneIndex] += minYet;
         droneChargeRem[droneIndex] = fullCharge;
         dronePos[droneIndex] = nearCharge;
         freeDrones.add(droneIndex);

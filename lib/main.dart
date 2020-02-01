@@ -111,8 +111,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
-                  // Container(
-                  //     child: Text("size of map"),),
+                  Container(
+                      child: Text("size of map"),),
                       SliderTheme(
                         data:SliderTheme.of(context).copyWith(
                           activeTrackColor: Colors.black,
@@ -139,8 +139,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
-                  // Container(
-                  //     child: Text("capacity of drone"),),
+                  Container(
+                      child: Text("capacity of drone"),),
                       SliderTheme(
                         data:SliderTheme.of(context).copyWith(
                           activeTrackColor: Colors.black,

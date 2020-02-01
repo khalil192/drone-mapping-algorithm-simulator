@@ -60,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
      void clearAll(){
        for(int i=0;i<numCells;i++){
          String curr = valueController.cellController[i].selectedAs.value;
-         if(curr == "drone-start"){
+         if(curr == "drone-start" || curr == "drone"){
            valueController.cellController[i].selectedAs.value = "drone";
             continue;
          }
@@ -150,7 +150,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                   onChanged: (newRating){
                                     setState(() {
                                       fullCharge = newRating.toInt();
-                                      valueController = new ValueController(numCells, perRow,colorsList);
                                     });
                                 },
                           ),

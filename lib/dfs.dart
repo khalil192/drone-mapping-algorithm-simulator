@@ -17,6 +17,7 @@ class Dfs{
   int fullCharge;
   List<int> cluster;
   Queue<int> freeDrones;
+  List<int> droneOriginalPos;
   int TAKETHIS,DONTTAKETHIS;
   List<List<int> > droneNodes;
   int row,col; 
@@ -29,12 +30,14 @@ class Dfs{
       chargePos = new List<int>();
       dronePos = new List<int>();
       droneDist = new List<double>();
+      droneOriginalPos = new List<int>();
       for(int i=0;i<numCells;i++){
           if(valueController.cellController[i].selectedAs.value == "charge"){
             chargePos.add(i);
           }
           if(valueController.cellController[i].selectedAs.value == "drone"){
             dronePos.add(i);
+            droneOriginalPos.add(i);
           }
       }
       droneChargeRem = new List<int>(dronePos.length);
@@ -116,7 +119,9 @@ class Dfs{
   await allocateDrones();
    await markPath();
     await printMetrics();
-
+  }
+  for(int pos in droneOriginalPos){
+    valueController.cellController[pos].selectedAs.value = "drone";
   }
   }
   Future<bool> dfs(int droneIndex,String dronenum,int curr) async{
@@ -125,9 +130,9 @@ class Dfs{
       bool flag = true;
       if(droneChargeRem[droneIndex] >0){
       visi[curr] = droneIndex;  //####
-      if(valueController.cellController[curr].selectedAs.value == "normal"||valueController.cellController[curr].selectedAs.value == "drone-start"){
+      if(valueController.cellController[curr].selectedAs.value == "normal"){
           droneNodes[droneIndex].add(curr);
-          valueController.cellController[curr].selectedAs.value = "visi";
+      valueController.cellController[curr].selectedAs.value = "visi";
         }
       droneChargeRem[droneIndex]--;
         // await wait();

@@ -12,6 +12,7 @@ class Dfs{
   List<int> dronePos;
   List<int> chargePos;
   List<int> droneChargeRem;
+  List<double> droneDist;
   Set<int> yetToBeVisited;
   int fullCharge;
   List<int> cluster;
@@ -27,6 +28,7 @@ class Dfs{
       // chargePos  = [20 , 200,740];
       chargePos = new List<int>();
       dronePos = new List<int>();
+      droneDist = new List<double>();
       for(int i=0;i<numCells;i++){
           if(valueController.cellController[i].selectedAs.value == "charge"){
             chargePos.add(i);
@@ -49,6 +51,7 @@ class Dfs{
       }
       freeDrones = new Queue<int>();
       for(int i=0;i<dronePos.length;i++){
+        droneDist.add(0);
         droneChargeRem[i] = fullCharge;
         freeDrones.add(i); 
       }
@@ -61,6 +64,7 @@ class Dfs{
     int i2 = cell2 ~/perRow , j2 = cell2 % perRow;
     return sqrt((i1-i2)*(i1-i2) + (j1-j2)*(j1-j2)).toInt();
   }
+  double distValue;
   Future<bool> safeState(int droneIndex , int lastPos){
     double minYet = 1000000; //INF
     int nearCharge;
@@ -71,6 +75,7 @@ class Dfs{
         nearCharge = charge;
       }
     }
+    distValue = minYet;
     return Future.value(droneChargeRem[droneIndex] >= minYet);
   }
   Future  markPath()async{
@@ -89,6 +94,16 @@ class Dfs{
         await wait();
       }
   }
+  Future printMetrics() async{
+      double completeDist = 0,maxDist = 0;
+      for(int i =0;i<dronePos.length;i++){
+        completeDist += droneDist[i];
+        maxDist = max(maxDist , droneDist[i]);
+        print('drone '+ i.toString() + " : " + droneDist[i].toString());
+      }
+      print('complete Dist  = ' + completeDist.toString());
+      print('maxTime travelled = ' + maxDist.toString());
+  }
   void startMap(String method)async{
   droneNodes = new List<List<int> >();
   for(int i=0;i<dronePos.length;i++){
@@ -96,9 +111,12 @@ class Dfs{
   }
   if(method == "clustering"){
   await clusterMap();
+  await printMetrics();
   }else{
   await allocateDrones();
    await markPath();
+    await printMetrics();
+
   }
   }
   Future<bool> dfs(int droneIndex,String dronenum,int curr) async{
@@ -127,6 +145,7 @@ class Dfs{
             dronePos[droneIndex] = nextPos;
             yetToBeVisited.remove(curr);
             flag = false;
+            droneDist[droneIndex] += dist(dronePos[droneIndex], nextPos);
             if(
             await dfs(droneIndex,dronenum,nextPos)
              ){    return Future.value(true); }
@@ -155,9 +174,9 @@ class Dfs{
       }
         return Future.value(flag); 
   }
-  bool safeStateCluster(int droneIndex , int nextPos){
+  Future<bool>  safeStateCluster(int droneIndex , int nextPos){
     int currDist = dist(dronePos[droneIndex] , nextPos).toInt();
-    return (currDist <= droneChargeRem[droneIndex]);
+    return Future.value(currDist <= droneChargeRem[droneIndex]);
   }
   Future<bool> clusterDfs(int droneIndex,String dronenum,int curr) async{
       int currX = curr ~/ perRow;
@@ -181,12 +200,13 @@ class Dfs{
             continue;
           }
           if((valueController.cellController[nextPos].selectedAs.value == "normal" || valueController.cellController[nextPos].selectedAs.value == "charge") 
-          && safeStateCluster(droneIndex , nextPos)){
+          && await safeStateCluster(droneIndex , nextPos)){
             dronePos[droneIndex] = nextPos;
             yetToBeVisited.remove(curr);
             flag = false;
+            droneDist[droneIndex] += dist(nextPos,curr);
             if(
-            await dfs(droneIndex,dronenum,nextPos)
+            await clusterDfs(droneIndex,dronenum,nextPos)
              ){    return Future.value(true); }
           }
         }
@@ -251,7 +271,6 @@ class Dfs{
       for(int pos in yetToBeVisited){
         // print('came alright');
         if(valueController.cellController[pos].selectedAs.value == "normal"){
-          
         int currDist = dist(dronePos[currDrone],pos).toInt();     
         // print(currDist.toString() + ' cur÷rDist');
         if(currDist < minYet){
@@ -261,8 +280,9 @@ class Dfs{
         } 
       }
         // print(nextPos.toString() + " next pos "+ currDrone.toString());
-      if(nextPos != -1 && minYet  < fullCharge && safeStateCluster(currDrone, nextPos)) {
+      if(nextPos != -1 && minYet  < fullCharge && await safeStateCluster(currDrone, nextPos)) {
       droneChargeRem[currDrone] -= minYet.toInt(); 
+      droneDist[currDrone]+= minYet;
       await  clusterDfs(currDrone, "drone"+ currDrone.toString() , nextPos);
     }
     if(pastNum == yetToBeVisited.length){
@@ -274,6 +294,8 @@ class Dfs{
     }
     }
     await markPath();
+    print(yetToBeVisited.length.toString()+ "yet to");
+    print(freeDrones.length.toString()+ "freeDrones");
   }
 
   Future allocateDrones() async{
@@ -299,6 +321,7 @@ class Dfs{
       droneChargeRem[currDrone] -= minYet.toInt(); 
       if( await safeState(currDrone, nextPos)){
       droneNodes[currDrone].add(nextPos);
+      droneDist[currDrone]+= minYet;
       await dfs(currDrone, "drone"+ currDrone.toString() , nextPos);
       }
       }

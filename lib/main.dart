@@ -58,9 +58,17 @@ class _HomeScreenState extends State<HomeScreen> {
   // static List<int> dronePos  = [20,20,200,740,200,740];
   static ValueController valueController =  ValueController(numCells,perRow,colorsList);
      void clearAll(){
-    setState(() {
-      valueController = new ValueController(numCells, perRow,colorsList);
-    });
+       for(int i=0;i<numCells;i++){
+         String curr = valueController.cellController[i].selectedAs.value;
+         if(curr == "drone-start"){
+           valueController.cellController[i].selectedAs.value = "drone";
+            continue;
+         }
+         if(curr == "charge" || curr == "block"){
+          continue;
+         }
+           valueController.cellController[i].selectedAs.value = "normal";
+       }
   }
   void startMap(){
       Dfs dfsObj = new Dfs(valueController,fullCharge);  
